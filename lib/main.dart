@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:typed_data';
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:usb_serial/transaction.dart';
@@ -398,28 +397,73 @@ class _MyAppState extends State<MyApp> {
                     // : () async
 
                     () async {
+                  var utctime = new DateTime.now().microsecondsSinceEpoch;
+
                   var url = Uri.parse(
-                    'https://raw.githubusercontent.com/dev-yakuza/users/master/api.json',
-                  );
-                  // var response = http.get(url);
-                  // print(response);
-
-                  http.Response response = await http.get(url);
+                      "http://zwfarm.ddns.net:8080/jj_netroom/insert");
                   try {
-                    if (response.statusCode == 200) {
-                      String data = response.body;
-                      var decodedData = jsonDecode(data);
-                      print(decodedData);
+                    Map data = {
+                      'temperature': 4,
+                      'humidity': 2,
+                      'illumination': 3,
+                      'wind_volume': 4,
+                      'wind_direction': 5,
+                      'rainfall': 6,
+                      'temperature2': 7,
+                      'humidity2': 8,
+                      'illumination2': 9,
+                      'wind_volume2': 10,
+                      'wind_direction2': 11,
+                      'rainfall2': 12,
+                      'date': utctime
+                    };
 
-                      // return decodedData;
-                    } else {
-                      // return 'failed';
-                      print('failed#1');
-                    }
+                    var body = json.encode(data);
+
+                    final response = await http.post(url,
+                        headers: {"Content-Type": "application/json"},
+                        body: body);
+
+                    print("post OK!");
                   } catch (e) {
-                    // return 'failed';
-                    print('failed#2');
+                    print(e);
                   }
+
+                  // var url = Uri.parse(
+                  //     "http://zwfarm.ddns.net:8080/jj_netroom/insert");
+
+                  // http.Response response = await http.post(url, body: {
+                  //   'temperature': 2,
+                  //   'humidity': 2,
+                  //   'illumination': 3,
+                  //   'wind_volume': 4,
+                  //   'wind_direction': 5,
+                  //   'rainfall': 6,
+                  //   'temperature2': 7,
+                  //   'humidity2': 8,
+                  //   'illumination2': 9,
+                  //   'wind_volume2': 10,
+                  //   'wind_direction2': 11,
+                  //   'rainfall2': 12,
+                  //   'date': DateTime.now().toUtc()
+                  // });
+                  // try {
+                  //   if (response.statusCode == 200) {
+                  //     String data = response.body;
+                  //     var decodedData = jsonDecode(data);
+                  //     print(decodedData);
+
+                  //     print("port OK!");
+
+                  //     // return decodedData;
+                  //   } else {
+                  //     // return 'failed';
+                  //     print('failed#1');
+                  //   }
+                  // } catch (e) {
+                  //   // return 'failed';
+                  //   print('failed#2');
+                  // }
 
                   // print('Response status: ${response}');
                   // print('Response body: ${response.body}');
