@@ -29,6 +29,19 @@ class _MyAppState extends State<MyApp> {
 
   int cmdIndex = 0;
 
+  double temperature = 0.0;
+  double humidity = 0.0;
+  double illumination = 0.0;
+  double wind_volume = 0.0;
+  double wind_direction = 0.0;
+  double rainfall = 0.0;
+  double temperature2 = 0.0;
+  double humidity2 = 0.0;
+  double illumination2 = 0.0;
+  double wind_volume2 = 0.0;
+  double wind_direction2 = 0.0;
+  double rainfall2 = 0.0;
+
   StreamSubscription<String>? _subscription;
   Transaction<String>? _transaction;
   UsbDevice? _device;
@@ -198,16 +211,31 @@ class _MyAppState extends State<MyApp> {
         if (event[0] == 0x76) iDataList[6] += 1;
         if (event[0] == 0xd9) iDataList[7] += 1;
 
-        // if (event[0] == 0xc9) {
-        //   _serialData.add(Text("RAINFALL=" +
-        //       ((event[6] / 100).toString()) +
-        //       "mm")); // fullString));
+        if (event[0] == 0xc9) {
+          _serialData.add(Text("RAINFALL=" +
+              ((event[6] / 100).toString()) +
+              "mm")); // fullString));
 
-        //   if (_serialData.length > 10) {
-        //     _serialData.removeAt(0);
-        //   }
-        //   print(Text("RAINFALL=" + ((event[6] / 100).toString()) + "mm"));
-        // }
+          rainfall = event[6] / 100;
+
+          if (_serialData.length > 10) {
+            _serialData.removeAt(0);
+          }
+          print(Text("RAINFALL=" + ((event[6] / 100).toString()) + "mm"));
+        }
+
+        if (event[0] == 0xd9) {
+          _serialData.add(Text("RAINFALL#2=" +
+              ((event[6] / 100).toString()) +
+              "mm")); // fullString));
+
+          rainfall2 = event[6] / 100;
+
+          if (_serialData.length > 10) {
+            _serialData.removeAt(0);
+          }
+          print(Text("RAINFALL#2=" + ((event[6] / 100).toString()) + "mm"));
+        }
 
         // if (event[0] == 0xd9) {
         //   _serialData.add(Text("OUTDOOR RAINFALL=" +
@@ -221,24 +249,24 @@ class _MyAppState extends State<MyApp> {
         //       Text("OUTDOOR RAINFALL=" + ((event[6] / 100).toString()) + "mm"));
         // }
 
-        print(fullString);
-        _serialData.add(Text(fullString)); // fullString));
+        // print(fullString);
+        // _serialData.add(Text(fullString)); // fullString));
 
-        // _serialData.add(Text(iDataList[0].toString() +
-        //     ',' +
-        //     iDataList[1].toString() +
-        //     ',' +
-        //     iDataList[2].toString() +
-        //     ',' +
-        //     iDataList[3].toString() +
-        //     ',' +
-        //     iDataList[4].toString() +
-        //     ',' +
-        //     iDataList[5].toString() +
-        //     ',' +
-        //     iDataList[6].toString() +
-        //     ',' +
-        //     iDataList[7].toString())); // fullString));
+        _serialData.add(Text(iDataList[0].toString() +
+            ',' +
+            iDataList[1].toString() +
+            ',' +
+            iDataList[2].toString() +
+            ',' +
+            iDataList[3].toString() +
+            ',' +
+            iDataList[4].toString() +
+            ',' +
+            iDataList[5].toString() +
+            ',' +
+            iDataList[6].toString() +
+            ',' +
+            iDataList[7].toString())); // fullString));
 
         if (_serialData.length > 10) {
           _serialData.removeAt(0);
@@ -369,7 +397,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
-            title: const Text('USB_SERIAL'),
+            title: const Text('USB_SERIAL Ver0.2 2022-08-28'),
           ),
           body: Center(
               child: Column(children: <Widget>[
@@ -403,18 +431,18 @@ class _MyAppState extends State<MyApp> {
                       "http://zwfarm.ddns.net:8080/jj_netroom/insert");
                   try {
                     Map data = {
-                      'temperature': 4,
-                      'humidity': 2,
-                      'illumination': 3,
-                      'wind_volume': 4,
-                      'wind_direction': 5,
-                      'rainfall': 6,
-                      'temperature2': 7,
-                      'humidity2': 8,
-                      'illumination2': 9,
-                      'wind_volume2': 10,
-                      'wind_direction2': 11,
-                      'rainfall2': 12,
+                      'temperature': temperature,
+                      'humidity': humidity,
+                      'illumination': illumination,
+                      'wind_volume': wind_volume,
+                      'wind_direction': wind_direction,
+                      'rainfall': rainfall,
+                      'temperature2': temperature2,
+                      'humidity2': humidity2,
+                      'illumination2': illumination2,
+                      'wind_volume2': wind_volume2,
+                      'wind_direction2': wind_direction2,
+                      'rainfall2': rainfall2,
                       'date': utctime
                     };
 
